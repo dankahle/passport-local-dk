@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+	<meta charset="UTF-8">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+	<title>angular</title>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<style>
+	</style>
+</head>
+<body ng-controller="ctrl">
+
+<h3>Register</h3>
+
+<form ng-submit="submit()" autocomplete="off">
+	fullName: <input ng-model="user.fullName" autofocus autocomplete="off"><br>
+	name: <input ng-model="user.username" autocomplete="off"><br>
+	pword: <input ng-model="user.password" autocomplete="off"><br>
+	email: <input ng-model="user.email" autocomplete="off"><br>
+	<button type="submit">Register</button><br>
+</form>
+<div style="color:red">{{errmsg}}</div>
+<div ng-if="ruser11">
+	<h3>Welcome to DK industries {{ruser.fullName}}</h3>
+	Please <a href="/login" target="_self">login</a>
+</div>
+
+<script>
+	var app = angular.module('app', []);
+	app.config(['$locationProvider', function($locationProvider) {
+		$locationProvider.html5Mode({
+			enabled: true,
+			requireBase: false
+		});
+	}]);
+	app.controller('ctrl', function ($scope, $http, $location) {
+
+		$scope.submit = function () {
+			$scope.errmsg = '';
+
+			$scope.ruser = null;
+			$http.post('/login/register', $scope.user)
+					.then(function (resp) {
+						$scope.ruser = resp.data;
+						location.href = '/';
+					}, function (resp) {
+						$scope.errmsg = resp.data.message? resp.data.message: resp.data;
+					})
+		}
+	})
+</script>
+</body>
+</html>

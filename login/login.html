@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+	<meta charset="UTF-8">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+	<title>angular</title>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<style>
+	</style>
+</head>
+<body ng-controller="ctrl">
+
+<h3>Login</h3>
+
+<form ng-submit="submit()" autocomplete="off">
+	name: <input ng-model="user.username" autofocus autocomplete="off"><br>
+	pword: <input ng-model="user.password" autocomplete="off"><br>
+	<button type="submit">Login</button><br>
+	<a href="/login/register.html" target="_self">Register</a>
+</form>
+<div style="color:red">{{errmsg}}</div>
+
+<script>
+	var app = angular.module('app', []);
+	app.config(['$locationProvider', function($locationProvider) {
+		$locationProvider.html5Mode({
+			enabled: true,
+			requireBase: false
+		});
+	}]);
+	app.controller('ctrl', function ($scope, $http, $location) {
+
+		$scope.submit = function () {
+			$scope.errmsg = '';
+			$http.post('/login', $scope.user)
+					.then(function (resp) {
+						$scope.ruser = resp.data;
+						var retUrl = $location.search().returnUrl;
+						location.href = retUrl || '/';
+					}, function (resp) {
+							$scope.errmsg = resp.data.message? resp.data.message: resp.data;
+					})
+		}
+
+	})
+</script>
+</body>
+</html>

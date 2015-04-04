@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+   <meta charset="UTF-8">
+   <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+   <title>angular</title>
+   <script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+   <style>
+   </style>
+</head>
+<body ng-controller="ctrl">
+<h3>index.html</h3>
+welcome: {{user.fullName}}<br>
+<a href="/login/logout">logout</a>
+
+<script>
+	var app = angular.module('app', []);
+	app.controller('ctrl', function($scope, $http){
+
+      $http.get('/api/user').then(function(resp) {
+         $scope.user = resp.data;
+      })
+
+	})
+</script>
+</body>
+</html>
