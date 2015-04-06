@@ -8,9 +8,9 @@
  * loginRollYourOwn:  is my attempt at doing it without passport, as passport doesn't really do anything, it's so plugin ready, that all the code is written by you. This greatly simplified things.
  
  * loginRollYourOwnMongoose: here I utilized passport-local-mongoose to roll my own with a db and hashing the pword. This is more realistic and still simplified
-  
-  * login: a simple passport-local solution with faked dataabse and no pword hashing
-  
-  * loginMongoose: finally a realistic solution using passport, a database and pword hashing.
+
+* login: a simple passport-local solution with faked dataabse and no pword hashing
+
+* loginMongoose: finally a realistic solution using passport, a database and pword hashing.
   
   
