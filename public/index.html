@@ -12,11 +12,12 @@
 <h3>index.html</h3>
 welcome: {{user.fullName}}<br>
 <a href="/login/logout">logout</a>
+<br><br>document.cookie: {{cookie}}
 
 <script>
 	var app = angular.module('app', []);
 	app.controller('ctrl', function($scope, $http){
-
+        $scope.cookie = document.cookie;
       $http.get('/api/user').then(function(resp) {
          $scope.user = resp.data;
       })

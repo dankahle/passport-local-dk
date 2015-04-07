@@ -2,7 +2,8 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   apiErrorHandler = require('api-error-handler'),
   expressDomainMiddleware = require('express-domain-middleware'),
-  session = require('express-session'),
+  session = require('cookie-session'),
+//  session = require('express-session'),
   passport = require('passport'),
   passportLocalMongoose = require('passport-local-mongoose'),
   mongoose = require('mongoose')
@@ -19,7 +20,10 @@ var db = mongoose.createConnection('mongodb://localhost:27017/db')
 var User = db.model('User', userSchema);
 
 var app = express()
-app.use(session({secret: 'secret', resave: true, saveUninitialized: true}))
+// cookie-session
+app.use(session({secret: 'secret', httpOnly: true, signed: true}))
+// express-session
+//app.use(session({secret: 'secret', resave: true, saveUninitialized: true}))
 app.use(bodyParser.json())
 app.use(expressDomainMiddleware)
 

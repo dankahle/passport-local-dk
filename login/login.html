@@ -19,7 +19,7 @@
 	<a href="/login/register.html" target="_self">Register</a>
 </form>
 <div style="color:red">{{errmsg}}</div>
-
+<br>document.cookie: {{cookie}}
 <script>
 	var app = angular.module('app', []);
 	app.config(['$locationProvider', function($locationProvider) {
@@ -31,6 +31,7 @@
 	app.controller('ctrl', function ($scope, $http, $location) {
 
 		$scope.submit = function () {
+			$scope.cookie = document.cookie;
 			$scope.errmsg = '';
 			$http.post('/login', $scope.user)
 					.then(function (resp) {
