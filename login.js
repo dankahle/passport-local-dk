@@ -31,7 +31,7 @@ function findByUsername(username, fn) {
   return fn(null, null);
 }
 
-passport.use(new LocalStrategy(
+passport.use('local-login', new LocalStrategy(
   function (username, password, done) {
     findByUsername(username, function (err, user) {
       if (err)
@@ -46,6 +46,24 @@ passport.use(new LocalStrategy(
     })
   }
 ));
+
+/*
+// reusing login code for register. They do it in a PS course, but this is hokey as you don't
+have req.body access here. You'd like to create the user here, but only have username/pass here
+so get stuck doing it in /register instead and passing an empty obj
+passport.use('local-register', new LocalStrategy(
+  function (username, password, done) {
+    findByUsername(username, function (err, _user) {
+      if (err)
+        return done(err);
+      if (_user)
+        return done(null, false, {message: 'User already exists'});
+
+      return done(null, {});// empty obj for now as we need req.body access for rest of props
+    })
+  }
+));
+*/
 
 var app = express()
 app.use(session({secret: 'secret', resave: true, saveUninitialized: true}))
@@ -64,7 +82,7 @@ app.use('/login', express.static('login', {index: false})) // open up only login
 app.post('/login', function (req, res, next) {
   // we have to hook into authentication to get the login errors as the flashes are of
   // no use to us in xhr land
-  passport.authenticate('local', function (err, user, info) {
+  passport.authenticate('local-login', function (err, user, info) {
     if (err)
       return next(err)
 
@@ -79,6 +97,34 @@ app.post('/login', function (req, res, next) {
     });
   })(req, res, next);
 });
+
+/*
+// partner to the login-register strategy above, not a good way to go cause don't have access
+// to req.body in strategy so have to do it here. Easier to do it all here then
+app.post('/login/register', function (req, res, next) {
+  // we have to hook into authentication to get the login errors as the flashes are of
+  // no use to us in xhr land
+  passport.authenticate('local-register', function (err, user, info) {
+    if (err)
+      return next(err)
+
+    if (!user)
+      return next({status: 401, message: info.message})
+
+    // be nice to do this in strategy but we don't have req.body access there
+    user = req.body;
+    user.id = users.length + 1;
+    users.push(user);
+
+    req.logIn(user, function (err) {
+      if (err)
+        return next(err);
+
+      return res.end();//res.send(req.user)
+    });
+  })(req, res, next);
+});
+*/
 
 /*
 // simple error version (400/bad request, 401/unauthorized)
