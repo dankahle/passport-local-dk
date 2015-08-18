@@ -9,7 +9,7 @@
  
  * loginRollYourOwnMongoose: here I utilized passport-local-mongoose to roll my own with a db and hashing the pword. This is more realistic and still simplified
 
-* login: a simple passport-local solution with faked dataabse and no pword hashing
+* login: a simple passport-local solution with faked database and no pword hashing
 
 * loginMongoose: finally a realistic solution using passport, a database and pword hashing.
   
